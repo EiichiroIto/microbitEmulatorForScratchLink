@@ -1,6 +1,7 @@
 #include <M5Unified.h>
 #include "scratchlink.h"
 #include "matrix.h"
+#include "imu.h"
 
 #define ScratchLinkName "matrix"
 
@@ -19,14 +20,15 @@ void setup()
 
   init_scratchlink(ScratchLinkName);
   init_matrix();
+  init_imu();
 
   M5_LOGI("Starting ...");
+  imu_calibrate();
   matrix_scroll("Start");
 }
 
 unsigned long scratchlink_msec = 0;
 bool button_pressed = false;
-m5::imu_data_t imuData;
 
 void loop()
 {
@@ -36,28 +38,9 @@ void loop()
   unsigned long now = millis();
   if (now - scratchlink_msec > 1000) {
     scratchlink_msec = now;
-    M5.Imu.update();
-    imuData = M5.Imu.getImuData();
-    float v;
+
     uint16_t accx, accy;
-    v = imuData.accel.x;
-    v = v < -1.0f ? -1.0f : v;
-    v = v > 1.0f ? 1.0f : v;
-    v *= 32767.0f;
-    if (v < 0) {
-      accx = (uint16_t) (v + 65536);
-    } else {
-      accx = (uint16_t) v;
-    }
-    v = imuData.accel.y;
-    v = v < -1.0f ? -1.0f : v;
-    v = v > 1.0f ? 1.0f : v;
-    v *= 32767.0f;
-    if (v < 0) {
-      accy = (uint16_t) (v + 65536);
-    } else {
-      accy = (uint16_t) v;
-    }
+    imu_getaccel(&accx, &accy, NULL);
     scratchlink_update(accx, accy, button_pressed, false, false, false, false, 0);
     button_pressed = false;
   }
