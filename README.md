@@ -4,7 +4,7 @@ micro:bit emulator for ScratchLink
 M5Stack 系デバイスにScratchLink のBLEプロトコルを実装したものです。
 プロジェクト名のように micro:bit の全ての機能を網羅しているわけではありませんが、Scratch の micro:bit 拡張でデバイスを操作できるようになります。
 
-基本的な機能のみ実装しているので各自で必要な機能を追加してご利用ください。
+最小限の機能のみ実装しているので各自で必要な機能を追加してご利用ください。
 
 # インストール
 - vscode でビルドしてください。（platformio 拡張機能が必要です）
