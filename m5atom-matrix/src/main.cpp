@@ -22,9 +22,10 @@ void setup()
   init_matrix();
   init_imu();
 
-  M5_LOGI("Starting ...");
+  M5_LOGI("Calibrating ...");
   imu_calibrate();
   matrix_scroll("Start");
+  M5_LOGI("Starting ...");
 }
 
 unsigned long scratchlink_msec = 0;
@@ -39,7 +40,7 @@ void loop()
   if (now - scratchlink_msec > 1000) {
     scratchlink_msec = now;
 
-    uint16_t accx, accy;
+    float accx, accy;
     imu_getaccel(&accx, &accy, NULL);
     scratchlink_update(accx, accy, button_pressed, false, false, false, false, 0);
     button_pressed = false;

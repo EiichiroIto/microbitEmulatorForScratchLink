@@ -163,20 +163,32 @@ void init_scratchlink(const char *devicename)
   scratchlink_startadvertising();
 }
 
+static uint16_t float2uint16(float v)
+{
+  v = v < -1.0f ? -1.0f : v;
+  v = v > 1.0f ? 1.0f : v;
+  v *= 32767.0f;
+  return v < 0 ? (uint16_t) (v + 65536) : (uint16_t) v;
+}
+
 // scratchlink_update
 // data frame
 //     0           1          2           3          4         5         6        7        8        9
 // [AccX High] [AccX Low] [AccY High] [AccY Low] [ButtonA] [ButtonB] [Touch0] [Touch1] [Touch2] [Gesture]
-void scratchlink_update(uint16_t accx, uint16_t accy, bool buttonA, bool buttonB, bool touch0, bool touch1, bool touch2, int gesture)
+void scratchlink_update(float accx, float accy, bool buttonA, bool buttonB, bool touch0, bool touch1, bool touch2, int gesture)
 {
   if (!NotifyEnabled) {
     return;
   }
   u_int8_t data[10];
-  data[0] = (accx >> 8) % 256;
-  data[1] = accx % 256;
-  data[2] = (accy >> 8) % 256;
-  data[3] = accy % 256;
+  uint16_t acc;
+
+  acc = float2uint16(accx);
+  data[0] = (acc >> 8) % 256;
+  data[1] = acc % 256;
+  acc = float2uint16(accy);
+  data[2] = (acc >> 8) % 256;
+  data[3] = acc % 256;
   data[4] = buttonA ? 1 : 0;
   data[5] = buttonB ? 1 : 0;
   data[6] = touch0 ? 1 : 0;
