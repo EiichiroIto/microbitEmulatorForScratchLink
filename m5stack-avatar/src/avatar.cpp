@@ -19,9 +19,15 @@ Avatar avatar;
 
 void init_avatar()
 {
-//  M5.Display.setRotation(AVATAR_ROTATION);
-//  avatar.setScale(AVATAR_SCALE);
-//  avatar.setPosition(AVATAR_TOP, AVATAR_LEFT);
+#ifdef AVATAR_ROTATION
+  M5.Display.setRotation(AVATAR_ROTATION);
+#endif /* AVATAR_ROTATION */
+#ifdef AVATAR_SCALE
+  avatar.setScale(AVATAR_SCALE);
+#endif /* AVATAR_SCALE */
+#ifdef AVATAR_TOP
+  avatar.setPosition(AVATAR_TOP, AVATAR_LEFT);
+#endif /* AVATAR_TOP */
   avatar.init(1);
 }
 
